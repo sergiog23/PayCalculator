@@ -18,13 +18,19 @@ float PercentageMarBiweekly[] = {0.10,0.12,0.22,0.24,0.32,0.35};
 float RateSumMarWeekly[] = {0.0,37.30,174.70,553.10,1259.66,1793.42};
 float PercentageMarWeekly[] = {0.10,0.12,0.22,0.24,0.32,0.35};
 
-
+//Function to Calculate gross check
 float Calc (int hours, int rate ){
-
 float gross;
 gross= hours *rate;
 return gross;
+}
 
+float CalcOT( float hours, float rate){
+float  OTrate=rate*1.5;
+float nose; 
+nose = OTrate*hours;
+
+return nose;
 }
 float Single ( float Hours, float Rate) {
 	
@@ -92,13 +98,7 @@ float Single ( float Hours, float Rate) {
 
 	
 }
-float CalcOT( float hours, float rate){
-float  OTrate=rate*1.5;
-float nose; 
-nose = OTrate*hours;
 
-return nose;
-}
 //function to calculate SSN and medicare
 float calcSSMED( float gross)
 {
