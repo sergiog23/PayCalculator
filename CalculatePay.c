@@ -2,21 +2,20 @@
 
 //Declaration of Constant rates pulled from IRS 2019 Publication 156
 
+float Percentage[] = {0.10,0.12,0.22,0.24,0.32,0.35};
+
 // Single and Biweekly
 float RateSumSingleBiweekly[] = {0.0, 37.30, 174.70, 553.32, 1259.64, 1793.40};
-float PercentageSingleBiweekly[] = {0.10,0.12,0.22,0.24,0.32,0.35};
 
 //Single and weekly
 float RateSumSingleWeekly[] = {0.0, 18.70, 87.34, 276.54, 629.82, 896.70};
-float PercentageSingleWeekly[] = {0.10,0.12,0.22,0.24,0.32,0.35};
 
 //Married and Biweekly 
 float RateSumMarBiweekly[] = {0.0,74.60,349.40, 1106.42, 2519.06,3586.90};
-float PercentageMarBiweekly[] = {0.10,0.12,0.22,0.24,0.32,0.35};
 
 //Married and Weekly
 float RateSumMarWeekly[] = {0.0,37.30,174.70,553.10,1259.66,1793.42};
-float PercentageMarWeekly[] = {0.10,0.12,0.22,0.24,0.32,0.35};
+
 
 //Function to Calculate gross check
 float Calc (int hours, int rate ){
