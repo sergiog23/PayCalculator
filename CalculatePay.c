@@ -1,15 +1,19 @@
+
+
 #include <stdio.h>
 //Global Variable declarations
 float net;
 float check;
 float no;
 float yes;
+float DeductArr[10];
 
 int Status;
 int Type;
 float Hours;
 float Rate;
 float hoursOT;
+float NumOfDeduct;
 //Declaration of Constant rates pulled from IRS 2019 Publication 15
 
 float Percentage[] = {0.10,0.12,0.22,0.24,0.32,0.35};
@@ -28,7 +32,7 @@ float RateSumMarWeekly[] = {0.0,37.30,174.70,553.10,1259.66,1793.42};
 
 
 //Function to Calculate gross check
-float Calc (int hours, int rate ){
+float Calc (float hours, float rate ){
     float gross;
     gross= hours *rate;
     return gross;
@@ -58,77 +62,61 @@ float Calc401k( float gross, float Percentage){
     float deduction= gross * (Percentage * 0.01);
     return deduction;
 }
-//Function that calculates net pay for Single person getting paid biweekly
+//Function that calculates single biweekly
+
 void SingleBiweekly ( float Hours, float Rate) {
-    
+    float total;
+    float gross= Calc (Hours, Rate);
+    hoursOT=Hours-80.0;
+   
     if( Hours <= 80)
     {
-        float ans= Calc (Hours, Rate);
-        
-        if ( ans > 146  && ans< 519){
-            no = calcSSMED(ans);
-            check= ans - 146;
-            yes = check *Percentage[0];
-            net = ans - (no+yes);
-        }
-        else if ( ans > 519  &&  ans < 1664){
-            no = calcSSMED(ans);
-            check= ans - 519;
-            yes = check *Percentage[1];
-            net = ans - (no+yes+RateSumSingleBiweekly[1]);
-        }
-        else if ( ans > 1664  && ans< 3385){
-            no = calcSSMED(ans);
-            check= ans - 1664;
-            yes = check * Percentage[2];
-            net = ans - (no+yes+RateSumSingleBiweekly[2]);
-        }
-            printf("Your net pay is: %.2f\n",net);
+        total= Calc (Hours, Rate);
     }
     else
     {
-        hoursOT=Hours-80.0;
-        float OT= CalcOT(hoursOT,Rate);
-        float Regular= Calc(80, Rate);
-        float total= OT + Regular;
-    
-        if ( total > 146  && total < 519){
-            no = calcSSMED(total);
-            check= total - 146;
-            yes = check * Percentage[0];
-            net = total - (no+yes);
-        }
-        else if ( total > 519  && total < 1664){
-            no = calcSSMED(total);
-            check= total - 519;
-            yes = check * Percentage[1];
-            net = total - (no+yes+RateSumSingleBiweekly[1]);
-        }
-        else if ( total > 1664  && total< 3385){
-            no = calcSSMED(total);
-            check= total - 1664.0;
-            yes = check *Percentage[2];
-            net = total - (no+yes+RateSumSingleBiweekly[2]);
-        }
-        printf("your net pay is: %.2f\n",net);
-        
+        total = (Calc( 80, Rate))+ (CalcOT(hoursOT,Rate));
     }
     
+    if ( total > 146  && total < 519){
+        no = calcSSMED(total);
+        check= total - 146;
+        yes = check * Percentage[0];
+        net = total - (no+yes);
+    }
+    else if ( total > 519  && total < 1664){
+        no = calcSSMED(total);
+        check= total - 519.0;
+        yes = check * Percentage[1];
+        net = total - (no+yes+RateSumSingleBiweekly[1]);
+    }
+    else if ( total > 1664  && total< 3385){
+        no = calcSSMED(total);
+        check= total - 1664.0;
+        yes = check *Percentage[2];
+        net = total - (no+yes+RateSumSingleBiweekly[2]);
+    }
+    
+    printf("Your gross pay is: %.2f\n",gross);
+    printf("Your net pay is: %.2f\n",net);
     
 }
+
+
 //Function that calculates net pay for
 void SingleWeekly ( float Hours, float Rate) {
-    
+    float ans;
      hoursOT=Hours-40.0;
     
     if( Hours <= 40)
     {
-        float ans= Calc (Hours, Rate);
+        ans= Calc (Hours, Rate);
     }
     else
     {
-        float ans = (Calc( Hours, Rate))+ (CalcOT(hoursOT,Rate));
+        ans = (Calc( Hours, Rate))+ (CalcOT(hoursOT,Rate));
     }
+    
         if ( ans > 73  && ans< 260 ){
             no = calcSSMED(ans);
             check= ans - 73;
@@ -147,19 +135,87 @@ void SingleWeekly ( float Hours, float Rate) {
             yes = check * Percentage[2];
             net = ans - (no+yes+RateSumSingleWeekly[2]);
         }
-    }
+    
 
         printf("Your net pay is: %.2f\n",net);
         
     }
     
+
+void MarriedWeekly ( float Hours, float Rate)
+{
+    float ans;
+    hoursOT=Hours-40.0;
+    
+    if( Hours <= 40)
+    {
+        ans= Calc (Hours, Rate);
+    }
+    else
+    {
+        ans = (Calc( Hours, Rate))+ (CalcOT(hoursOT,Rate));
+    }
+    
+    if ( ans > 73  && ans< 260 ){
+        no = calcSSMED(ans);
+        check= ans - 73;
+        yes = check *Percentage[0];
+        net = ans - (no+yes);
+    }
+    else if ( ans > 260  &&  ans < 832){
+        no = calcSSMED(ans);
+        check= ans - 260;
+        yes = check *Percentage[1];
+        net = ans - (no+yes+RateSumMarWeekly[1]);
+    }
+    else if ( ans > 832 && ans< 1692){
+        no = calcSSMED(ans);
+        check= ans - 1664;
+        yes = check * Percentage[2];
+        net = ans - (no+yes+RateSumMarWeekly[2]);
+    }
+    
+    
+    printf("Your net pay is: %.2f\n",net);
     
 }
-                         
-float Married ( float Hours, float Rate)
+
+void MarriedBiweekly( float Hours, float Rate)
 {
+    float total;
+    float gross= Calc (Hours, Rate);
+    hoursOT=Hours-80.0;
     
-    return 0.0;
+    if( Hours <= 80)
+    {
+        total= Calc (Hours, Rate);
+    }
+    else
+    {
+        total = (Calc( 80, Rate))+ (CalcOT(hoursOT,Rate));
+    }
+    
+    if ( total > 146  && total < 519){
+        no = calcSSMED(total);
+        check= total - 146;
+        yes = check * Percentage[0];
+        net = total - (no+yes);
+    }
+    else if ( total > 519  && total < 1664){
+        no = calcSSMED(total);
+        check= total - 519.0;
+        yes = check * Percentage[1];
+        net = total - (no+yes+RateSumMarBiweekly[1]);
+    }
+    else if ( total > 1664  && total< 3385){
+        no = calcSSMED(total);
+        check= total - 1664.0;
+        yes = check *Percentage[2];
+        net = total - (no+yes+RateSumMarBiweekly[2]);
+    }
+    
+    printf("Your gross pay is: %.2f\n",gross);
+    printf("Your net pay is: %.2f\n",net);
 }
                          
                         
@@ -169,12 +225,22 @@ int main(){
     
     
     // User Input
-    printf("PRESS 1 for Single .. Press 2 For married ");
+    int i;
+    printf("**************************************\n\n");
+    printf("PRESS 1 for Single  Press 2 For married ");
     scanf("%d",&Status);
-    
+    printf("**************************************\n\n");
     printf("Press 1 for weekly.. Press 2 for biweekly ");
     scanf("%d",&Type);
-    
+    printf("Please enter the number of deductions you have: \n");
+    scanf("%d",&NumOfDeduct);
+    printf("For each deduction enter the amount in dollars.\n");
+    for(i=0;i<NumOfDeduct;i++)
+    {
+        printf("Deduction %d",i );
+        scanf(" ")
+        
+    }
     printf("Enter rate: ");
     scanf("%f",&Rate);
     printf("Enter hours worked: ");
@@ -187,13 +253,17 @@ int main(){
           SingleBiweekly( Hours, Rate);
                 break;
             }
-            else
-          Si
+          SingleWeekly(Hours, Rate);
             break;
+            
         //Married
         case 2 :
-            Married ( Hours, Rate);
-            
+            if(Type==2)
+            {
+            MarriedWeekly ( Hours, Rate);
+            break;
+            }
+            MarriedBiweekly( Hours, Rate);
             break;
     }
     
