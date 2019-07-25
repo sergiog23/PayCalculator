@@ -65,7 +65,8 @@ float Calc401k( float gross, float Percentage){
 //Function that calculates single biweekly
 float CalcDeduction(float DeductArr[],float NumOfDeduct)
 {
-    int sum;
+    float sum;
+    if (NumOfDeduct ==0) return 0.0;
     for ( int i=0; i < NumOfDeduct; i++)
     {
         sum += DeductArr[i];
@@ -76,7 +77,8 @@ void SingleBiweekly ( float Hours, float Rate) {
     float total;
     float gross= Calc (Hours, Rate);
     hoursOT=Hours-80.0;
-   
+    totDeductAmount=CalcDeduction(DeductArr,NumOfDeduct);
+    //printf("%f:",totDeductAmount);
     if( Hours <= 80)
     {
         total= Calc (Hours, Rate);
@@ -90,19 +92,19 @@ void SingleBiweekly ( float Hours, float Rate) {
         no = calcSSMED(total);
         check= total - 146;
         yes = check * Percentage[0];
-        net = total - (no+yes);
+        net = total - (no+yes+totDeductAmount);
     }
     else if ( total > 519  && total < 1664){
         no = calcSSMED(total);
         check= total - 519.0;
         yes = check * Percentage[1];
-        net = total - (no+yes+RateSumSingleBiweekly[1]);
+        net = total - (no+yes+RateSumSingleBiweekly[1]+totDeductAmount);
     }
     else if ( total > 1664  && total< 3385){
         no = calcSSMED(total);
         check= total - 1664.0;
         yes = check *Percentage[2];
-        net = total - (no+yes+RateSumSingleBiweekly[2]);
+        net = total - (no+yes+RateSumSingleBiweekly[2]+totDeductAmount);
     }
     
     //printf("Your gross pay is: %.2f\n",gross);
@@ -115,8 +117,9 @@ void SingleBiweekly ( float Hours, float Rate) {
 //Function that calculates net pay for
 void SingleWeekly ( float Hours, float Rate) {
     float ans;
-     hoursOT=Hours-40.0;
-    
+    hoursOT=Hours-40.0;
+    totDeductAmount=CalcDeduction(DeductArr,NumOfDeduct);
+   //printf("%f sds",totDeductAmount);
     if( Hours <= 40)
     {
         ans= Calc (Hours, Rate);
@@ -130,19 +133,19 @@ void SingleWeekly ( float Hours, float Rate) {
             no = calcSSMED(ans);
             check= ans - 73;
             yes = check *Percentage[0];
-            net = ans - (no+yes);
+            net = ans - (no+yes+totDeductAmount);
         }
         else if ( ans > 260  &&  ans < 832){
             no = calcSSMED(ans);
             check= ans - 260;
             yes = check *Percentage[1];
-            net = ans - (no+yes+RateSumSingleWeekly[1]);
+            net = ans - (no+yes+RateSumSingleWeekly[1]+totDeductAmount);
         }
         else if ( ans > 832 && ans< 1692){
             no = calcSSMED(ans);
             check= ans - 1664;
             yes = check * Percentage[2];
-            net = ans - (no+yes+RateSumSingleWeekly[2]);
+            net = ans - (no+yes+RateSumSingleWeekly[2]+totDeductAmount);
         }
     
     printf(" __________________________\n");
@@ -155,7 +158,7 @@ void MarriedWeekly ( float Hours, float Rate)
 {
     float ans;
     hoursOT=Hours-40.0;
-    
+    totDeductAmount=CalcDeduction(DeductArr,NumOfDeduct);
     if( Hours <= 40)
     {
         ans= Calc (Hours, Rate);
@@ -169,19 +172,19 @@ void MarriedWeekly ( float Hours, float Rate)
         no = calcSSMED(ans);
         check= ans - 73;
         yes = check *Percentage[0];
-        net = ans - (no+yes);
+        net = ans - (no+yes+totDeductAmount);
     }
     else if ( ans > 260  &&  ans < 832){
         no = calcSSMED(ans);
         check= ans - 260;
         yes = check *Percentage[1];
-        net = ans - (no+yes+RateSumMarWeekly[1]);
+        net = ans - (no+yes+RateSumMarWeekly[1]+totDeductAmount);
     }
     else if ( ans > 832 && ans< 1692){
         no = calcSSMED(ans);
         check= ans - 1664;
         yes = check * Percentage[2];
-        net = ans - (no+yes+RateSumMarWeekly[2]);
+        net = ans - (no+yes+RateSumMarWeekly[2]+totDeductAmount);
     }
     
     printf(" __________________________\n");
@@ -195,7 +198,7 @@ void MarriedBiweekly( float Hours, float Rate)
     float total;
     float gross= Calc (Hours, Rate);
     hoursOT=Hours-80.0;
-    
+    totDeductAmount=CalcDeduction(DeductArr,NumOfDeduct);
     if( Hours <= 80)
     {
         total= Calc (Hours, Rate);
@@ -209,19 +212,19 @@ void MarriedBiweekly( float Hours, float Rate)
         no = calcSSMED(total);
         check= total - 146;
         yes = check * Percentage[0];
-        net = total - (no+yes);
+        net = total - (no+yes+totDeductAmount);
     }
     else if ( total > 519  && total < 1664){
         no = calcSSMED(total);
         check= total - 519.0;
         yes = check * Percentage[1];
-        net = total - (no+yes+RateSumMarBiweekly[1]);
+        net = total - (no+yes+RateSumMarBiweekly[1]+totDeductAmount);
     }
     else if ( total > 1664  && total< 3385){
         no = calcSSMED(total);
         check= total - 1664.0;
         yes = check *Percentage[2];
-        net = total - (no+yes+RateSumMarBiweekly[2]);
+        net = total - (no+yes+RateSumMarBiweekly[2]+totDeductAmount);
     }
     
     //printf("Your gross pay is: %.2f\n",gross);
@@ -246,11 +249,9 @@ int main(){
     scanf("%d",&Type);
     printf("Please enter the number of deductions you have: \n");
     scanf("%f",&NumOfDeduct);
-    if( NumOfDeduct!=0)
-    {
+    if( NumOfDeduct!=0){
         
     printf("For each deduction enter the amount in dollars.\n");
-    
     }
     for(i=0;i<NumOfDeduct;i++)
     {
@@ -262,8 +263,8 @@ int main(){
     scanf("%f",&Rate);
     printf("Enter hours worked: ");
     scanf("%f",&Hours);
-    totDeductAmount=CalcDeduction(DeductArr,NumOfDeduct);
-    printf("ISSS %f",totDeductAmount);
+   // totDeductAmount=CalcDeduction(DeductArr,NumOfDeduct);
+    //printf("ISSS %f",totDeductAmount);
     switch (Status) {
         //Single
         case 1 :
@@ -271,6 +272,7 @@ int main(){
             SingleBiweekly( Hours, Rate);
             break;
             }
+            else
             SingleWeekly(Hours, Rate);
             break;
             
