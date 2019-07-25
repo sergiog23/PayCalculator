@@ -1,5 +1,4 @@
 
-
 #include <stdio.h>
 //Global Variable declarations
 float net;
@@ -14,6 +13,7 @@ float Hours;
 float Rate;
 float hoursOT;
 float NumOfDeduct;
+float totDeductAmount;
 //Declaration of Constant rates pulled from IRS 2019 Publication 15
 
 float Percentage[] = {0.10,0.12,0.22,0.24,0.32,0.35};
@@ -63,7 +63,15 @@ float Calc401k( float gross, float Percentage){
     return deduction;
 }
 //Function that calculates single biweekly
-
+float CalcDeduction(float DeductArr[],float NumOfDeduct)
+{
+    int sum;
+    for ( int i=0; i < NumOfDeduct; i++)
+    {
+        sum += DeductArr[i];
+    }
+    return sum;
+}
 void SingleBiweekly ( float Hours, float Rate) {
     float total;
     float gross= Calc (Hours, Rate);
@@ -97,9 +105,10 @@ void SingleBiweekly ( float Hours, float Rate) {
         net = total - (no+yes+RateSumSingleBiweekly[2]);
     }
     
-    printf("Your gross pay is: %.2f\n",gross);
-    printf("Your net pay is: %.2f\n",net);
-    
+    //printf("Your gross pay is: %.2f\n",gross);
+    printf(" __________________________\n");
+    printf("| Your net pay is: %.2f |\n",net);
+    printf(" ---------------------------\n");
 }
 
 
@@ -136,9 +145,9 @@ void SingleWeekly ( float Hours, float Rate) {
             net = ans - (no+yes+RateSumSingleWeekly[2]);
         }
     
-
-        printf("Your net pay is: %.2f\n",net);
-        
+    printf(" __________________________\n");
+    printf("| Your net pay is: %.2f |\n",net);
+    printf(" ---------------------------\n");
     }
     
 
@@ -175,8 +184,9 @@ void MarriedWeekly ( float Hours, float Rate)
         net = ans - (no+yes+RateSumMarWeekly[2]);
     }
     
-    
-    printf("Your net pay is: %.2f\n",net);
+    printf(" __________________________\n");
+    printf("| Your net pay is: %.2f |\n",net);
+    printf(" ---------------------------\n");
     
 }
 
@@ -214,8 +224,10 @@ void MarriedBiweekly( float Hours, float Rate)
         net = total - (no+yes+RateSumMarBiweekly[2]);
     }
     
-    printf("Your gross pay is: %.2f\n",gross);
-    printf("Your net pay is: %.2f\n",net);
+    //printf("Your gross pay is: %.2f\n",gross);
+    printf(" __________________________\n");
+    printf("| Your net pay is: %.2f |\n",net);
+    printf(" ---------------------------\n");
 }
                          
                         
@@ -233,27 +245,33 @@ int main(){
     printf("Press 1 for weekly.. Press 2 for biweekly ");
     scanf("%d",&Type);
     printf("Please enter the number of deductions you have: \n");
-    scanf("%d",&NumOfDeduct);
+    scanf("%f",&NumOfDeduct);
+    if( NumOfDeduct!=0)
+    {
+        
     printf("For each deduction enter the amount in dollars.\n");
+    
+    }
     for(i=0;i<NumOfDeduct;i++)
     {
-        printf("Deduction %d",i );
-        scanf(" ")
+        printf("Deduction %d: ",i+1 );
+        scanf("%f",&DeductArr[i]);
         
     }
     printf("Enter rate: ");
     scanf("%f",&Rate);
     printf("Enter hours worked: ");
     scanf("%f",&Hours);
-    
+    totDeductAmount=CalcDeduction(DeductArr,NumOfDeduct);
+    printf("ISSS %f",totDeductAmount);
     switch (Status) {
         //Single
         case 1 :
             if(Type== 2){
-          SingleBiweekly( Hours, Rate);
-                break;
+            SingleBiweekly( Hours, Rate);
+            break;
             }
-          SingleWeekly(Hours, Rate);
+            SingleWeekly(Hours, Rate);
             break;
             
         //Married
