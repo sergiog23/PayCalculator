@@ -48,6 +48,7 @@ float CalcOT( float hours, float rate){
 //function to calculate SSN and medicare
 float calcSSMED( float gross)
 {
+    //fixed rates from IRS website
     float SS= 0.0145;
     float Med= 0.062;
     float sum;
@@ -241,10 +242,10 @@ int main(){
     
     // User Input
     int i;
-    printf("**************************************\n\n");
+    printf("________________________________________\n\n");
     printf("PRESS 1 for Single  Press 2 For married ");
     scanf("%d",&Status);
-    printf("**************************************\n\n");
+    printf("__________________________________________\n\n");
     printf("Press 1 for weekly.. Press 2 for biweekly ");
     scanf("%d",&Type);
     printf("Please enter the number of deductions you have: \n");
