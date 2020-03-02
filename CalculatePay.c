@@ -32,6 +32,7 @@ float RateSumMarWeekly[] = {0.0,37.30,174.70,553.10,1259.66,1793.42};
 
 
 //Function to Calculate gross check
+
 float Calc (float hours, float rate ){
     float gross;
     gross= hours *rate;
